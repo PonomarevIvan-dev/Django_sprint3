@@ -10,9 +10,8 @@ def index(request):
     current_time = timezone.now()
 
     post_list = Post.objects.select_related('author', 'category').filter(
-        Q(is_published=True) &
-        Q(pub_date__lte=current_time) &
-        Q(category__is_published=True)
+        Q(is_published=True) & Q(pub_date__lte=current_time)
+        & Q(category__is_published=True)
     ).order_by('-pub_date')[:5]
 
     context = {
@@ -29,9 +28,8 @@ def category_posts(request, category_slug):
     current_time = timezone.now()
 
     post_list = Post.objects.select_related('author', 'category').filter(
-        Q(category=category) &
-        Q(is_published=True) &
-        Q(pub_date__lte=current_time)
+        Q(category=category) & Q(is_published=True)
+        & Q(pub_date__lte=current_time)
     ).order_by('-pub_date')
 
     context = {
@@ -47,10 +45,9 @@ def post_detail(request, post_id):
 
     post = get_object_or_404(
         Post.objects.select_related('author', 'category'),
-        Q(id=post_id) &
-        Q(is_published=True) &
-        Q(pub_date__lte=current_time) &
-        Q(category__is_published=True)
+        Q(id=post_id) & Q(is_published=True)
+        & Q(pub_date__lte=current_time)
+        & Q(category__is_published=True)
     )
 
     context = {

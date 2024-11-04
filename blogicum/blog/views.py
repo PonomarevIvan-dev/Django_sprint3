@@ -9,9 +9,9 @@ def filter_published_posts(queryset):
     current_time = timezone.now()    # Вынес переменную тоже отдельно,
     # показалось так будет правильно, или лучше вызов по месту как Вы написали?
     return queryset.filter(
-        Q(is_published=True) &
-        Q(pub_date__lte=current_time) &
-        Q(category__is_published=True)
+        Q(is_published=True)
+        & Q(pub_date__lte=current_time)
+        & Q(category__is_published=True)
     )
 
 

@@ -5,6 +5,11 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+class PostQuerySet(models.QuerySet):
+    def with_category(self):
+        return self.select_related('category')
+
+
 class PublishedModel(models.Model):
     """Абстрактная модель. Добавляет флаг is_published и created_at."""
 
@@ -54,16 +59,22 @@ class Post(PublishedModel):
     pub_date = models.DateTimeField(
         verbose_name='Дата и время публикации',
         help_text=('Если установить дату и время в будущем — можно'
-                   ' делать отложенные публикации.'))
+                   ' делать отложенные публикации.')
+    )
     author = models.ForeignKey(
         User,
-        on_delete=models.CASCADE, verbose_name='Автор публикации')
-    location = models.ForeignKey(Location, on_delete=models.SET_NULL,
-                                 null=True,
-                                 verbose_name='Местоположение')
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL,
-                                 null=True,
-                                 verbose_name='Категория')
+        on_delete=models.CASCADE, verbose_name='Автор публикации'
+    )
+    location = models.ForeignKey(
+        Location, on_delete=models.SET_NULL, null=True,
+        verbose_name='Местоположение'
+    )
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True,
+        verbose_name='Категория'
+    )
+
+    objects = PostQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'публикация'

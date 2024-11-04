@@ -71,7 +71,7 @@ class Post(PublishedModel):
     )
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True,
-        verbose_name='Категория'
+        verbose_name='Категория', related_name='posts'
     )
 
     objects = PostQuerySet.as_manager()
